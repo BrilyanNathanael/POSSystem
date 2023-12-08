@@ -1,0 +1,37 @@
+package com.wide.pos.domain;
+
+public class SaleItem {
+	private int quantity;
+	private int price;
+	private Item item;
+	
+	public SaleItem(Item item) {
+		this.item = item;
+		this.price = item.getPrice();
+	}
+	
+	public Item getItem() {
+		return item;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+	
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	public int totalPrice() {
+		return this.quantity * this.price;
+	}
+	
+}
