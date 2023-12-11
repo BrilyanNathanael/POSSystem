@@ -5,9 +5,10 @@ public class SaleItem {
 	private int price;
 	private Item item;
 	
-	public SaleItem(Item item) {
+	public SaleItem(Item item, int quantity) {
 		this.item = item;
 		this.price = item.getPrice();
+		this.quantity = quantity;
 	}
 	
 	public Item getItem() {

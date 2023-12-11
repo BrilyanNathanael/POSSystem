@@ -6,12 +6,14 @@ public class Item {
 	private int price;
 	private String description;
 	private String type;
+	private boolean taxable;
 	
-	public Item(String itemCode, int price, String description, String type) {
+	public Item(String itemCode, int price, String description, String type, boolean taxable) {
 		this.itemCode = itemCode;
 		this.price = price;
 		this.description = description;
 		this.type = type;
+		this.taxable = taxable;
 	}
 
 	public String getItemCode() {
@@ -44,5 +46,13 @@ public class Item {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public boolean getTaxable() {
+		return taxable;
+	}
+	
+	public void setTaxable(boolean taxable) {
+		this.taxable = taxable;
 	}
 }

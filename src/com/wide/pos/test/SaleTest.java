@@ -1,11 +1,17 @@
 package com.wide.pos.test;
 
 import java.util.Date;
+import java.util.Iterator;
 
+import com.wide.pos.domain.CashPayment;
 import com.wide.pos.domain.Cashier;
 import com.wide.pos.domain.Item;
+import com.wide.pos.domain.Payment;
+import com.wide.pos.domain.QrisPayment;
 import com.wide.pos.domain.Sale;
 import com.wide.pos.domain.SaleItem;
+import com.wide.pos.domain.Tax;
+import com.wide.pos.usecase.ProcessSaleUseCase;
 
 public class SaleTest {
 
@@ -17,63 +23,150 @@ public class SaleTest {
 // 		Cashier Masuk
 		Cashier c = new Cashier("Bobby");
 		
-//		Input Item
-		Item item1 = new Item("1", 50000, "Buku Tulis A4", "ATK");
-		Item item2 = new Item("2", 100000, "Dunia Shopie", "Novel");
-		Item item3 = new Item("3", 40000, "Buku Gambar", "ATK");
-		Item item4 = new Item("4", 5000, "Pensil", "ATK");
-		Item item5 = new Item("5", 5000, "Penghapus", "ATK");
+		ProcessSaleUseCase saleUseCase = new ProcessSaleUseCase();
 		
-//		Masuk ke SaleItem
-		SaleItem si1 = new SaleItem(item1);
-		si1.setQuantity(4);
+		boolean checkPayment;
+		int totalGrandPrice, saleTax;
+		CashPayment cashPayment;
+		QrisPayment qrisPayment;
 		
-		SaleItem si2 = new SaleItem(item2);
-		si2.setQuantity(2);
+//		SALE #1
+		saleUseCase.createNewSale(1, c);
+		saleUseCase.addSaleItem("2", 2);
+		saleUseCase.addSaleItem("3", 4);
+		saleUseCase.addSaleItem("4", 3);
 		
-//		Masuk ke Sale
-		Sale sl1 = new Sale(1, new Date(), c);
+		System.out.println();
+		System.out.println("=======================");
+		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+		System.out.println("=======================");
+		printBeforeSales(saleUseCase.getSale());
 		
-		sl1.addSaleItem(si1);
-		sl1.addSaleItem(si2);
+		totalGrandPrice = saleUseCase.getSale().totalPrice();
+		saleTax = saleUseCase.getSale().calculateTax();
+
+		cashPayment = new CashPayment((totalGrandPrice + saleTax));
 		
-		printSales(sl1);
+		cashPayment.setCashInHand(500_000);
 		
-//		Masuk ke SaleItem
-		SaleItem si3 = new SaleItem(item3);
-		si3.setQuantity(1);
+		if(saleUseCase.makePayment(cashPayment)) {
+			Sale sale = saleUseCase.finishSale();
+			
+			System.out.println("=======================");
+			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			
+			printAfterSales(sale);
+		}
 		
-		SaleItem si4 = new SaleItem(item4);
-		si4.setQuantity(2);
 		
-//		Masuk ke Sale
-		Sale sl2 = new Sale(2, new Date(), c);
+//		SALE #2
+		saleUseCase.createNewSale(2, c);
+		saleUseCase.addSaleItem("1", 1);
+		saleUseCase.addSaleItem("4", 2);
 		
-		sl2.addSaleItem(si3);
-		sl2.addSaleItem(si4);
+		System.out.println();
+		System.out.println("=======================");
+		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+		System.out.println("=======================");
+		printBeforeSales(saleUseCase.getSale());
 		
-		printSales(sl2);
+		totalGrandPrice = saleUseCase.getSale().totalPrice();
+		saleTax = saleUseCase.getSale().calculateTax();
+
+		qrisPayment = new QrisPayment((totalGrandPrice + saleTax));
+		
+//		if(pay instanceof QrisPayment) {
+//			System.out.println("++++++++++++");
+//			System.out.println("Ini pakai qris");
+//		}
+		
+		if(saleUseCase.makePayment(qrisPayment)) {
+			Sale sale = saleUseCase.finishSale();
+			
+			System.out.println("=======================");
+			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			
+			printAfterSales(sale);
+		}
+		
+		
+//		SALE #3
+		saleUseCase.createNewSale(3, c);
+		saleUseCase.addSaleItem("2", 4);
+		saleUseCase.addSaleItem("5", 1);
+		
+		System.out.println();
+		System.out.println("=======================");
+		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+		System.out.println("=======================");
+		printBeforeSales(saleUseCase.getSale());
+		
+		totalGrandPrice = saleUseCase.getSale().totalPrice();
+		saleTax = saleUseCase.getSale().calculateTax();
+
+		cashPayment = new CashPayment((totalGrandPrice + saleTax));
+		
+		cashPayment.setCashInHand(500_000);
+		
+		if(saleUseCase.makePayment(cashPayment)) {
+			Sale sale = saleUseCase.finishSale();
+			
+			System.out.println("=======================");
+			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			
+			printAfterSales(sale);
+		}
+		
+		
 	}
 	
-	public static void printSales(Sale sl) {
+	public static void printBeforeSales(Sale sl) {
 		System.out.println("Sale Number: #" + sl.getSaleNumber());
 		System.out.println("Cashier: " + sl.getCashier().getName());
 		System.out.println("Date: " + sl.getTransDate());
 		System.out.println("Item:");
 		System.out.println("------------------------------");
-		for(SaleItem s : sl.getSaleItems()) {
-			if(s != null) {
-				System.out.println("Description: " + s.getItem().getDescription());	
-				System.out.println("Type: " + s.getItem().getType());
-				System.out.println("Quantity: " + s.getQuantity());
-				System.out.println("Price: " + s.getPrice());
-				System.out.println("Total Sub Price: " + s.totalPrice());
-				System.out.println();
-			}
+		
+		Iterator<SaleItem> itSaleItem = sl.getSaleItems().iterator();
+		
+		while(itSaleItem.hasNext()) {
+			SaleItem saleItem = itSaleItem.next();
+			System.out.println("Description: " + saleItem.getItem().getDescription());	
+			System.out.println("Type: " + saleItem.getItem().getType());
+			System.out.println("Quantity: " + saleItem.getQuantity());
+			System.out.println("Price: " + saleItem.getPrice());
+			System.out.println("Total Sub Price: " + saleItem.totalPrice());
+			System.out.println();
 		}
 		System.out.println("-----------------------------");
+		
+		int totalGrandPrice = sl.totalPrice();
+		int saleTax = sl.calculateTax();
+		
 		System.out.println("Total Grand Price: " + sl.totalPrice());
+		System.out.println("Tax (" + (int) (Tax.tax * 100) + "%): " + sl.calculateTax());
+		System.out.println("Total Price + Tax: " + (totalGrandPrice + saleTax));
+		
 		System.out.println();
+	}
+	
+	public static void printAfterSales(Sale sl) {
+		printBeforeSales(sl);
+		
+		System.out.println("-----------------------------");
+		if(sl.getPayment() instanceof CashPayment) {
+			CashPayment cashPayment = (CashPayment) sl.getPayment();
+			System.out.println("Payment (Cash) : " + cashPayment.getCashInHand());
+			System.out.println("Change : " + cashPayment.change());
+		}
+		else {
+			System.out.println("Payment (Qris) : " + sl.getPayment().getAmount());
+		}
+		System.out.println();
+		
 	}
 
 }
