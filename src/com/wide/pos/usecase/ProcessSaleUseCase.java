@@ -8,6 +8,7 @@ import com.wide.pos.domain.Payment;
 import com.wide.pos.domain.Sale;
 import com.wide.pos.repository.ItemRepository;
 import com.wide.pos.repository.ItemRepositoryDummy;
+import com.wide.pos.repository.ItemRepositoryFile;
 import com.wide.pos.repository.SaleRepository;
 import com.wide.pos.repository.SalesRepositoryDummy;
 
@@ -19,7 +20,7 @@ public class ProcessSaleUseCase {
 	private Payment payment;
 	
 	public ProcessSaleUseCase() {
-		itemRepository = new ItemRepositoryDummy();
+		itemRepository = new ItemRepositoryFile();
 		saleRepository = new SalesRepositoryDummy();
 	}
 	

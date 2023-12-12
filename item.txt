@@ -1,0 +1,5 @@
+1; 50000; Buku Tulis A4; ATK; -1
+2; 100000; Dunia Shopie; Novel; 0
+3; 40000; Buku Gambar; ATK; -1
+4; 5000; Pensil; ATK; 0
+5; 5000; Penghapus; ATK; -1
