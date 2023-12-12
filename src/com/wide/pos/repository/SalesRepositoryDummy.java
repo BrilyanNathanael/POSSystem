@@ -1,8 +1,10 @@
-package com.wide.pos.domain;
+package com.wide.pos.repository;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.wide.pos.domain.Sale;
 
 public class SalesRepositoryDummy implements SaleRepository {
 	

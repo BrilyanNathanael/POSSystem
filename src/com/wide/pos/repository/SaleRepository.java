@@ -1,4 +1,6 @@
-package com.wide.pos.domain;
+package com.wide.pos.repository;
+
+import com.wide.pos.domain.Sale;
 
 public interface SaleRepository {
 	void save(Sale sale);

@@ -1,5 +1,5 @@
 package com.wide.pos.domain;
 
 public class Tax {
-	public static double tax = 0.1;
+	public static final double tax = 0.1;
 }

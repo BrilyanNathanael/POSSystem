@@ -76,11 +76,6 @@ public class SaleTest {
 
 		qrisPayment = new QrisPayment((totalGrandPrice + saleTax));
 		
-//		if(pay instanceof QrisPayment) {
-//			System.out.println("++++++++++++");
-//			System.out.println("Ini pakai qris");
-//		}
-		
 		if(saleUseCase.makePayment(qrisPayment)) {
 			Sale sale = saleUseCase.finishSale();
 			
