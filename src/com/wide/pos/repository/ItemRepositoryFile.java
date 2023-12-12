@@ -11,11 +11,11 @@ import java.util.List;
 import com.wide.pos.domain.Item;
 
 public class ItemRepositoryFile implements ItemRepository {
-	private List<Item> readItems() {
+	private List<Item> findAll() {
 		List<Item> listItem = new ArrayList<Item>();
 		
 		try {	
-			FileReader fileReader = new FileReader("item.txt");
+			FileReader fileReader = new FileReader("itemCatalog.txt");
 			BufferedReader bufferReader = new BufferedReader(fileReader);
 			
 			String line = null;
@@ -47,7 +47,7 @@ public class ItemRepositoryFile implements ItemRepository {
 	public Item findByCode(String code) {
 		// TODO Auto-generated method stub
 		
-		List<Item> listItem = readItems();
+		List<Item> listItem = findAll();
 		
 		Iterator<Item> it = listItem.iterator();
 		
