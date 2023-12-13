@@ -7,10 +7,12 @@ import com.wide.pos.domain.Item;
 import com.wide.pos.domain.Payment;
 import com.wide.pos.domain.Sale;
 import com.wide.pos.repository.ItemRepository;
-import com.wide.pos.repository.ItemRepositoryDummy;
-import com.wide.pos.repository.ItemRepositoryFile;
+import com.wide.pos.repository.RepositoryException;
 import com.wide.pos.repository.SaleRepository;
-import com.wide.pos.repository.SalesRepositoryDummy;
+import com.wide.pos.repository.impl.ItemRepositoryDummy;
+import com.wide.pos.repository.impl.ItemRepositoryFile;
+import com.wide.pos.repository.impl.ItemRepositoryMySQL;
+import com.wide.pos.repository.impl.SalesRepositoryDummy;
 
 public class ProcessSaleUseCase {
 	
@@ -20,7 +22,7 @@ public class ProcessSaleUseCase {
 	private Payment payment;
 	
 	public ProcessSaleUseCase() {
-		itemRepository = new ItemRepositoryFile();
+		itemRepository = new ItemRepositoryMySQL();
 		saleRepository = new SalesRepositoryDummy();
 	}
 	
@@ -28,11 +30,18 @@ public class ProcessSaleUseCase {
 		this.sale = new Sale(saleNumber, new Date(), cashier);
 	}
 	
-	public void addSaleItem(String itemCode, int quantity) {
+	public void addSaleItem(String itemCode, int quantity) throws UseCaseException {
 		
-		Item item = itemRepository.findByCode(itemCode);
+		Item item;
+		try {
+			item = itemRepository.findByCode(itemCode);
+			this.sale.addSaleItem(item, quantity);
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			throw new UseCaseException(e.getMessage());
+		}
 		
-		this.sale.addSaleItem(item, quantity);
+		
 	}
 	
 	public boolean makePayment(Payment payment) {

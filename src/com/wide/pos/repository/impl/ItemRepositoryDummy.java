@@ -1,4 +1,4 @@
-package com.wide.pos.repository;
+package com.wide.pos.repository.impl;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.wide.pos.domain.Item;
+import com.wide.pos.repository.ItemRepository;
 
 public class ItemRepositoryDummy implements ItemRepository {
 

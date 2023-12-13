@@ -12,6 +12,7 @@ import com.wide.pos.domain.Sale;
 import com.wide.pos.domain.SaleItem;
 import com.wide.pos.domain.Tax;
 import com.wide.pos.usecase.ProcessSaleUseCase;
+import com.wide.pos.usecase.UseCaseException;
 
 public class SaleTest {
 
@@ -23,98 +24,101 @@ public class SaleTest {
 // 		Cashier Masuk
 		Cashier c = new Cashier("Bobby");
 		
-		ProcessSaleUseCase saleUseCase = new ProcessSaleUseCase();
-		
-		boolean checkPayment;
-		int totalGrandPrice, saleTax;
-		CashPayment cashPayment;
-		QrisPayment qrisPayment;
-		
-//		SALE #1
-		saleUseCase.createNewSale(1, c);
-		saleUseCase.addSaleItem("2", 2);
-		saleUseCase.addSaleItem("3", 4);
-		saleUseCase.addSaleItem("4", 3);
-		
-		System.out.println();
-		System.out.println("=======================");
-		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
-		System.out.println("=======================");
-		printBeforeSales(saleUseCase.getSale());
-		
-		totalGrandPrice = saleUseCase.getSale().totalPrice();
-		saleTax = saleUseCase.getSale().calculateTax();
-
-		cashPayment = new CashPayment((totalGrandPrice + saleTax));
-		
-		cashPayment.setCashInHand(500_000);
-		
-		if(saleUseCase.makePayment(cashPayment)) {
-			Sale sale = saleUseCase.finishSale();
+		try {
+			ProcessSaleUseCase saleUseCase = new ProcessSaleUseCase();
 			
-			System.out.println("=======================");
-			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
-			System.out.println("=======================");
+			boolean checkPayment;
+			int totalGrandPrice, saleTax;
+			CashPayment cashPayment;
+			QrisPayment qrisPayment;
 			
-			printAfterSales(sale);
+//			SALE #1
+			saleUseCase.createNewSale(1, c);
+			saleUseCase.addSaleItem("2", 2);
+			saleUseCase.addSaleItem("3", 4);
+			saleUseCase.addSaleItem("4", 3);
+			
+			System.out.println();
+			System.out.println("=======================");
+			System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			printBeforeSales(saleUseCase.getSale());
+			
+			totalGrandPrice = saleUseCase.getSale().totalPrice();
+			saleTax = saleUseCase.getSale().calculateTax();
+			
+			cashPayment = new CashPayment((totalGrandPrice + saleTax));
+			
+			cashPayment.setCashInHand(500_000);
+			
+			if(saleUseCase.makePayment(cashPayment)) {
+				Sale sale = saleUseCase.finishSale();
+				
+				System.out.println("=======================");
+				System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+				System.out.println("=======================");
+				
+				printAfterSales(sale);
+			}
+			
+//			SALE #2
+			saleUseCase.createNewSale(2, c);
+			saleUseCase.addSaleItem("1", 1);
+			saleUseCase.addSaleItem("4", 2);
+			
+			System.out.println();
+			System.out.println("=======================");
+			System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			printBeforeSales(saleUseCase.getSale());
+			
+			totalGrandPrice = saleUseCase.getSale().totalPrice();
+			saleTax = saleUseCase.getSale().calculateTax();
+			
+			qrisPayment = new QrisPayment((totalGrandPrice + saleTax));
+			
+			if(saleUseCase.makePayment(qrisPayment)) {
+				Sale sale = saleUseCase.finishSale();
+				
+				System.out.println("=======================");
+				System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+				System.out.println("=======================");
+				
+				printAfterSales(sale);
+			}
+			
+//			SALE #3
+			saleUseCase.createNewSale(3, c);
+			saleUseCase.addSaleItem("2", 4);
+			saleUseCase.addSaleItem("5", 1);
+			
+			System.out.println();
+			System.out.println("=======================");
+			System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
+			System.out.println("=======================");
+			printBeforeSales(saleUseCase.getSale());
+			
+			totalGrandPrice = saleUseCase.getSale().totalPrice();
+			saleTax = saleUseCase.getSale().calculateTax();
+			
+			cashPayment = new CashPayment((totalGrandPrice + saleTax));
+			
+			cashPayment.setCashInHand(500_000);
+			
+			if(saleUseCase.makePayment(cashPayment)) {
+				Sale sale = saleUseCase.finishSale();
+				
+				System.out.println("=======================");
+				System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
+				System.out.println("=======================");
+				
+				printAfterSales(sale);
+			}
+			
+		} catch (UseCaseException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 		}
-		
-		
-//		SALE #2
-		saleUseCase.createNewSale(2, c);
-		saleUseCase.addSaleItem("1", 1);
-		saleUseCase.addSaleItem("4", 2);
-		
-		System.out.println();
-		System.out.println("=======================");
-		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
-		System.out.println("=======================");
-		printBeforeSales(saleUseCase.getSale());
-		
-		totalGrandPrice = saleUseCase.getSale().totalPrice();
-		saleTax = saleUseCase.getSale().calculateTax();
-
-		qrisPayment = new QrisPayment((totalGrandPrice + saleTax));
-		
-		if(saleUseCase.makePayment(qrisPayment)) {
-			Sale sale = saleUseCase.finishSale();
-			
-			System.out.println("=======================");
-			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
-			System.out.println("=======================");
-			
-			printAfterSales(sale);
-		}
-		
-		
-//		SALE #3
-		saleUseCase.createNewSale(3, c);
-		saleUseCase.addSaleItem("2", 4);
-		saleUseCase.addSaleItem("5", 1);
-		
-		System.out.println();
-		System.out.println("=======================");
-		System.out.println("BEFORE PAYMENT SALE #" + saleUseCase.getSale().getSaleNumber());
-		System.out.println("=======================");
-		printBeforeSales(saleUseCase.getSale());
-		
-		totalGrandPrice = saleUseCase.getSale().totalPrice();
-		saleTax = saleUseCase.getSale().calculateTax();
-
-		cashPayment = new CashPayment((totalGrandPrice + saleTax));
-		
-		cashPayment.setCashInHand(500_000);
-		
-		if(saleUseCase.makePayment(cashPayment)) {
-			Sale sale = saleUseCase.finishSale();
-			
-			System.out.println("=======================");
-			System.out.println("AFTER PAYMENT SALE #" + + saleUseCase.getSale().getSaleNumber());
-			System.out.println("=======================");
-			
-			printAfterSales(sale);
-		}
-		
 		
 	}
 	
