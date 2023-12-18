@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 public class Sale {
 	private int saleNumber;
-	private Date transDate;
+	private String transDate;
 	private Cashier cashier;
 	private List<SaleItem> salesItem = new ArrayList<SaleItem>();
 	private Payment payment;
 	
-	public Sale(int saleNumber, Date transDate, Cashier cashier) {
+	public Sale(int saleNumber, String transDate, Cashier cashier) {
 		this.saleNumber = saleNumber;
 		this.transDate = transDate;
 		this.cashier = cashier;
@@ -29,11 +29,11 @@ public class Sale {
 		this.saleNumber = saleNumber;
 	}
 
-	public Date getTransDate() {
+	public String getTransDate() {
 		return transDate;
 	}
 
-	public void setTransDate(Date transDate) {
+	public void setTransDate(String transDate) {
 		this.transDate = transDate;
 	}
 	

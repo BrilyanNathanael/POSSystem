@@ -1,5 +1,6 @@
 package com.wide.pos.usecase;
 
+import java.sql.Connection;
 import java.util.Date;
 
 import com.wide.pos.domain.Cashier;
@@ -13,6 +14,7 @@ import com.wide.pos.repository.impl.ItemRepositoryDummy;
 import com.wide.pos.repository.impl.ItemRepositoryFile;
 import com.wide.pos.repository.impl.ItemRepositoryMySQL;
 import com.wide.pos.repository.impl.SalesRepositoryDummy;
+import com.wide.pos.repository.impl.SalesRepositoryMySQL;
 
 public class ProcessSaleUseCase {
 	
@@ -23,11 +25,11 @@ public class ProcessSaleUseCase {
 	
 	public ProcessSaleUseCase() {
 		itemRepository = new ItemRepositoryMySQL();
-		saleRepository = new SalesRepositoryDummy();
+		saleRepository = new SalesRepositoryMySQL();
 	}
 	
 	public void createNewSale(int saleNumber, Cashier cashier) {
-		this.sale = new Sale(saleNumber, new Date(), cashier);
+		this.sale = new Sale(saleNumber, new Date().toString(), cashier);
 	}
 	
 	public void addSaleItem(String itemCode, int quantity) throws UseCaseException {
@@ -53,10 +55,17 @@ public class ProcessSaleUseCase {
 		return this.sale;
 	}
 	
-	public Sale finishSale() {
+	public Sale finishSale() throws UseCaseException {
 		if(this.sale.getPayment().validate()) {
-			saleRepository.save(this.sale);
+			try {
+				saleRepository.save(this.sale);
+				return saleRepository.findByNumber(this.sale.getSaleNumber());
+				
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				throw new UseCaseException();
+			}
 		}
-		return saleRepository.findByNumber(this.sale.getSaleNumber());
+		return null;
 	}
 }

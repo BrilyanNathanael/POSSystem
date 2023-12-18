@@ -1,10 +1,14 @@
 package com.wide.pos.test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 
 import com.wide.pos.domain.CashPayment;
 import com.wide.pos.domain.Cashier;
+import com.wide.pos.domain.Database;
 import com.wide.pos.domain.Item;
 import com.wide.pos.domain.Payment;
 import com.wide.pos.domain.QrisPayment;
@@ -25,6 +29,10 @@ public class SaleTest {
 		Cashier c = new Cashier("Bobby");
 		
 		try {
+			
+//			Class.forName(Database.driver);
+//			Connection conn = DriverManager.getConnection(Database.jdbcUrl, Database.username, Database.password);
+//			
 			ProcessSaleUseCase saleUseCase = new ProcessSaleUseCase();
 			
 			boolean checkPayment;
@@ -118,12 +126,12 @@ public class SaleTest {
 		} catch (UseCaseException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
-		}
+		} 
 		
 	}
 	
 	public static void printBeforeSales(Sale sl) {
-		System.out.println("Sale Number: #" + sl.getSaleNumber());
+//		System.out.println("Sale Number: #" + sl.getSaleNumber());
 		System.out.println("Cashier: " + sl.getCashier().getName());
 		System.out.println("Date: " + sl.getTransDate());
 		System.out.println("Item:");

@@ -15,16 +15,24 @@ import com.wide.pos.repository.ItemRepository;
 import com.wide.pos.repository.RepositoryException;
 
 public class ItemRepositoryMySQL implements ItemRepository {
+	
+//	private Connection conn;
+//	
+//	public ItemRepositoryMySQL(Connection conn) {
+//		this.conn = conn;
+//	}
+	
 	private List<Item> findAll() throws RepositoryException {
 		List<Item> listItem = new ArrayList<Item>();
-		
+			
+		Connection conn = null;
 		try {
 //			Load Driver
 			Class.forName(Database.driver);
-			
+//			
 //			Get connection
-			Connection conn = DriverManager.getConnection(Database.jdbcUrl, Database.username, Database.password);
-			
+			conn = DriverManager.getConnection(Database.jdbcUrl, Database.username, Database.password);
+
 			String query = "SELECT * FROM item";
 			
 			Statement st = conn.createStatement();
@@ -48,12 +56,12 @@ public class ItemRepositoryMySQL implements ItemRepository {
 				listItem.add(new Item(itemCode, price, description, type, taxable));
 			}
 			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			throw new RepositoryException("Class tidak ditemukan");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new RepositoryException("Terdapat kesalahan pada SQL Query");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new RepositoryException("Class tidak ditemukan");
 		}
 		
 		return listItem;
