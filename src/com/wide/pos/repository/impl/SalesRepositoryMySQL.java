@@ -36,11 +36,11 @@ public class SalesRepositoryMySQL implements SaleRepository {
 			conn = DriverManager.getConnection(Database.jdbcUrl, Database.username, Database.password);
 			conn.setAutoCommit(false);
 			
+//			Memasukkan ke Sale
 			String sqlQuerySale = "INSERT INTO sale (sale_number, trans_date, cashier, payment, cash_in_hand) values (?,?,?,?,?)";
 			
 			PreparedStatement stm = conn.prepareStatement(sqlQuerySale);
 			
-//			Memasukkan ke Sale
 			String payment;
 			int cashInHand = 0;
 			if(sale.getPayment() instanceof CashPayment) {
@@ -60,7 +60,6 @@ public class SalesRepositoryMySQL implements SaleRepository {
 			
 			if(result > 0) {
 				
-//			Ambil data ID dari Sale Item untuk dimasukkan ke Sale
 				String querySelectId = "SELECT sale_number FROM sale ORDER BY id DESC LIMIT 1";
 				PreparedStatement stm2 = conn.prepareStatement(querySelectId);
 				
@@ -71,7 +70,6 @@ public class SalesRepositoryMySQL implements SaleRepository {
 					
 					for(SaleItem si : sale.getSaleItems()) {
 //						Memasukkan data Sale Item
-//						System.out.println("INI TESTTT BISA GAK YA");
 						String sqlQuery = "INSERT INTO sale_item (sale_number, item_id, quantity, price) values (?,?,?,?)";
 						
 						PreparedStatement stm3 = conn.prepareStatement(sqlQuery);
@@ -82,10 +80,6 @@ public class SalesRepositoryMySQL implements SaleRepository {
 						stm3.setInt(4, si.getPrice());
 						
 						int result3 = stm3.executeUpdate();
-						
-						if(result3 > 0) {
-							System.out.println("Success Sale Item save!");
-						}
 					}
 				}
 			}
